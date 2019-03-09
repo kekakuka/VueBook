@@ -1,0 +1,9 @@
+module.exports= [
+    'https://www.leili.fun/img/b1.jpg',
+    'https://www.leili.fun/img/b2.jpg',
+    'https://www.leili.fun/img/b3.jpg',
+    'https://www.leili.fun/img/b4.jpg',
+    'https://www.leili.fun/img/b5.jpg',
+];
+
+
