@@ -32,6 +32,7 @@ http.createServer((req,res)=>{
 
     let{pathname,query}=url.parse(req.url,true);
  let bid=parseInt(query.id) ;
+
     if(pathname==='/sliders'){
         res.setHeader('Content-Type',
             'application/json;charset=utf8');
@@ -54,6 +55,27 @@ http.createServer((req,res)=>{
                 });
                 break;
             case "POST":
+                let addStr='';
+                let newBook;
+                req.on('data',chunk=>{
+                    addStr+=chunk;
+
+                });
+                req.on('end',()=>{
+                    newBook=JSON.parse(addStr);
+
+                    readBooks(function (books) {
+                        console.log(books[books.length-1]);
+                        newBook.bookId=books[books.length-1].bookId+1;
+
+                        books.push(newBook);
+                         fs.writeFile('./book.json',JSON.stringify(books),function () {
+                            res.end(JSON.stringify());
+                         })
+                    });
+                });
+
+
                 break;
             case "PUT":
                if(bid){
@@ -64,13 +86,14 @@ http.createServer((req,res)=>{
                    });
                    req.on('end',()=>{
                         book=JSON.parse(str);
+                       readBooks(function (books) {
+                           let theBooks=books.map(item=>item.bookId===bid?item=book:item);
+                           fs.writeFile('./book.json',JSON.stringify(theBooks),function () {
+                               res.end(JSON.stringify());
+                           })
+                       });
                    });
-                   readBooks(function (books) {
-                       let theBooks=books.map(item=>item.bookId===bid?item=book:item);
-                       fs.writeFile('./book.json',JSON.stringify(theBooks),function () {
-                           res.end(JSON.stringify());
-                       })
-                   })
+
                }
                 break;
             case "DELETE":
