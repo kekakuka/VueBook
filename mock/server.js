@@ -12,6 +12,16 @@ function readBooks(cb){
         }
     })
 }
+function readbackBooks(cb){
+    fs.readFile('./bookbackup.json','utf8',function (err,data) {
+        if(err||data.length==0){
+            cb([]);
+        }else {
+            cb(data);
+        }
+    })
+}
+
 
 function writeBooks(id,cb){
    readBooks(function (books) {
@@ -23,13 +33,13 @@ function writeBooks(id,cb){
 }
 
 
+
 http.createServer((req,res)=>{
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader("Access-Control-Allow-Headers", "Content-Type,Content-Length, Authorization, Accept,X-Requested-With");
     res.setHeader("Access-Control-Allow-Methods","PUT,POST,GET,DELETE,OPTIONS");
     res.setHeader("X-Powered-By",' 3.2.1');
     if(req.method=="OPTIONS") return res.end();
-
     let{pathname,query}=url.parse(req.url,true);
  let bid=parseInt(query.id) ;
 
@@ -42,9 +52,19 @@ http.createServer((req,res)=>{
     if(pathname==='/hot'){
        readBooks(function (books) {
            let hotBooks=JSON.stringify(books.reverse().slice(0,6)) ;
-           res.end( hotBooks);
+           setTimeout(()=>{res.end( hotBooks);},300)
+
         });
         return ;
+    }
+    if(pathname==='/backup'){
+
+        readbackBooks(function (data) {
+            fs.writeFile('./book.json',data,function () {
+                res.end(JSON.stringify());
+            })
+        });
+       return ;
     }
     if(pathname==='/books'){
         switch (req.method) {
@@ -74,8 +94,6 @@ http.createServer((req,res)=>{
                          })
                     });
                 });
-
-
                 break;
             case "PUT":
                if(bid){
@@ -93,7 +111,6 @@ http.createServer((req,res)=>{
                            })
                        });
                    });
-
                }
                 break;
             case "DELETE":
@@ -106,7 +123,6 @@ http.createServer((req,res)=>{
     }
 
     if(pathname==='/details'){
-
         readBooks(function (books) {
 
            let theBook=books.find(item=>item.bookId===bid);
@@ -115,6 +131,20 @@ http.createServer((req,res)=>{
             res.setHeader('Content-Type','application/json;charset=utf8');
             res.end(hotBook);
         });
+        return;
     }
+    // fs.stat('.'+pathname,function (err,stats) {
+    //     if (err){
+    //         res.statusCode=404;
+    //         res.end('Not Found')
+    //     }
+    //     else {
+    //         if (stats.isDirectory()){
+    //             let p=require('path').join('.'+pathname,'./index.html');
+    //             fs.createReadStream(p).pipe(res)
+    //         }else {
+    //        fs.createReadStream('.'+pathname).pipe(res);}
+    //     }
+    // })
     }
 ).listen(3332);

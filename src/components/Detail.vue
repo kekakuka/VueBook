@@ -7,7 +7,7 @@
          <textarea class="form-control"    v-model="theBook.bookInfo" id="bookInfo" ></textarea></label>
       <label for="bookPrice">Book Price
       <input class="form-control"  type="text"  v-model.number="theBook.bookPrice" id="bookPrice" /></label>
-      <br> <button class="btn btn-primary" @click="changeBookDetails(theBook.bookId,theBook)">Submit</button>
+      <br><button class="btn btn-success" @click="goBack()">Back</button> <button class="btn btn-primary" @click="changeBookDetails(theBook.bookId,theBook)">Submit</button>
    </div>
  </div></div></div>
 </template>
@@ -32,8 +32,11 @@
       async   changeBookDetails(id,data){
           await changeTheBook(id,data);
           this.$router.push('/list')
-        }
-    },
+        },
+        goBack(){
+
+            this.$router.go(-1);
+        }    },
       watch:{
           $route(){
               this.getBook(this.$route.params.id);
@@ -61,7 +64,7 @@ textarea{
    width: 118%;
 }
    button{
-      margin-left: 40%;
+      margin-left:8%;
    }
    img{
       margin: 2% 32%  4% 12%;

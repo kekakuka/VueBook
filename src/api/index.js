@@ -1,5 +1,5 @@
 import axios from 'axios';
-axios.defaults.baseURL='http://localhost:3332';
+axios.defaults.baseURL='http://47.110.44.100:3332';
 
 export let getSliders=()=>{
    return axios.get('/sliders');
@@ -21,4 +21,11 @@ export let changeTheBook=(id,data)=>{
 };
 export let addBook=(data)=>{
     return axios.post('/books',data)
+};
+export let backupBook=()=>{
+    return axios.get('/backup')
+};
+
+export let getAll=()=>{
+    return axios.all([getSliders(),getHotBooks()]);
 };

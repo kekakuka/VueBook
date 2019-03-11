@@ -6,7 +6,7 @@
             <textarea class="form-control"    v-model="theBook.bookInfo" id="bookInfo" ></textarea></label>
         <label for="bookPrice">Book Price
             <input class="form-control"  type="text"  v-model.number="theBook.bookPrice" id="bookPrice" /></label>
-        <label for="bookCover">Book Cover
+        <label for="bookCover">Book Cover(img link)
             <input class="form-control"  type="text"  v-model="theBook.bookCover" id="bookCover" /></label>
         <br> <button class="btn btn-primary" @click="addABook(theBook)">Submit</button>
     </div>

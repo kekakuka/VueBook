@@ -10,7 +10,7 @@ import Add from '../components/Add.vue'
 
 export default new Router({
     routes: [
-        {path:'/home',component:Home},
+        {path:'/home',component:Home,meta:{keepAlive:true}},
         {path:'/collect',component:Collect },
         {path:'/details/:id',component:Detail},
         {path:'/list',component:List},

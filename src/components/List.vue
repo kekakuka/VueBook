@@ -7,14 +7,16 @@
         </div>
 
         </router-link>
-    <br></ul></div>
+    <br></ul>
+    <button @click="backup()">Back Up Books</button>
+    </div>
     </div>
 
 </template>
 
 <script>
     import Header from '../base/Header';
-    import {getBooks,removeBook}  from '../api/index';
+    import {getBooks,removeBook,backupBook}  from '../api/index';
   export default {
     data () {
       return {msg: 'List',bookList:[]}
@@ -30,6 +32,10 @@
          async removeOneBook(id){
           await  removeBook(id);
              this.bookList=this.bookList.filter(item=>item.bookId!==id);
+        },
+        async backup(){
+            await backupBook();
+            this.$router.push('/home');
         }
 
     },
